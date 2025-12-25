@@ -10,11 +10,22 @@ export default function NetworkBadge() {
       if (!provider) return;
 
       const net = await provider.getNetwork();
-      setNetwork(net.name);
+      setNetwork(getNetworkName(Number(net.chainId)));
     };
 
     loadNetwork();
   }, []);
+
+const getNetworkName = (id: number) => {
+  switch (id) {
+    case 1: return 'Mainnet';
+    case 5: return 'Goerli (Testnet)';
+    case 11155111: return 'Sepolia (Testnet)';
+    case 137: return 'Polygon Mainnet';
+    case 80001: return 'Mumbai (Testnet)';
+    default: return `Unknown (${id})`;
+  }
+};
 
   return (
     <div className="inline-block px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 mt-2">

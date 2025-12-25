@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getProvider } from "@/utils/web3";
+import BalanceCard from "@/components/BalanceCard";
 
 // 钱包连接组件 - 面试加分点说明：
 // 1. 使用 React Hooks 管理状态
@@ -9,27 +10,53 @@ import { getProvider } from "@/utils/web3";
 export default function WalletConnect() {
   // 使用useState管理钱包地址状态，初始值为空字符串
   const [address, setAddress] = useState<string>("");
+  const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   // 连接钱包的异步函数
   const connectWallet = async () => {
-    // 1. 获取Web3提供者（如MetaMask）
-    const provider = getProvider();
-    // 如果用户未安装钱包扩展，则直接返回
-    if (!provider) return;
+    if (isConnecting) return; // 防止重复点击
+    setIsConnecting(true);
 
-    // 2. 请求用户授权连接钱包
-    // 这会触发MetaMask弹窗要求用户确认连接
-    await provider.send("eth_requestAccounts", []);
-    
-    // 3. 获取签名者对象，用于后续交易签名
-    const signer = await provider.getSigner();
-    
-    // 4. 获取用户的钱包地址
-    const addr = await signer.getAddress();
-    
-    // 5. 更新组件状态，保存钱包地址
-    setAddress(addr);
+    try{
+
+        // 1. 获取Web3提供者（如MetaMask）
+      const provider = getProvider();
+      // 如果用户未安装钱包扩展，则直接返回
+      if (!provider) return;
+
+      // 2. 请求用户授权连接钱包
+      // 这会触发MetaMask弹窗要求用户确认连接
+      await provider.send("eth_requestAccounts", []);
+      
+      // 3. 获取签名者对象，用于后续交易签名
+      const signer = await provider.getSigner();
+      
+      // 4. 获取用户的钱包地址
+      const addr = await signer.getAddress();
+      
+      // 5. 更新组件状态，保存钱包地址
+      setAddress(addr);
+    } catch (error) {
+      console.error("连接钱包失败:", error);
+    } finally {
+      setIsConnecting(false);
+    }
   };
+
+  // ✅ 新增：页面加载时检查是否已连接
+  useEffect(() => {
+    const checkConnectedWallet = async () => {
+      const provider = getProvider();
+      if (!provider) return;
+
+      const accounts = await provider.send("eth_accounts", []);
+      if (accounts.length > 0) {
+        setAddress(accounts[0]);
+      }
+    };
+
+    checkConnectedWallet();
+  }, []);
 
   return (
     // 主容器：添加内边距、边框、圆角和最大宽度
@@ -39,9 +66,10 @@ export default function WalletConnect() {
         // 未连接钱包时显示连接按钮
         <button
           onClick={connectWallet}
-          className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+          disabled={isConnecting}
+          className={`px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors ${isConnecting ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          Connect Wallet
+          {isConnecting ? "Connecting..." : "Connect Wallet"}
         </button>
       ) : (
         // 已连接钱包时显示钱包地址
@@ -51,6 +79,7 @@ export default function WalletConnect() {
           <p className="font-mono mt-2" title={address}>
             {address.slice(0, 6)}...{address.slice(-4)}
           </p>
+          <BalanceCard address={address} />
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProvider } from "@/utils/web3";
+import NetworkBadge from "@/components/NetworkBadge";
 import BalanceCard from "@/components/BalanceCard";
 
 // 钱包连接组件 - 面试加分点说明：
@@ -79,6 +80,7 @@ export default function WalletConnect() {
           <p className="font-mono mt-2" title={address}>
             {address.slice(0, 6)}...{address.slice(-4)}
           </p>
+          <NetworkBadge />
           <BalanceCard address={address} />
         </div>
       )}

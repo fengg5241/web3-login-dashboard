@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getProvider } from "@/utils/web3";
 import NetworkBadge from "@/components/NetworkBadge";
 import BalanceCard from "@/components/BalanceCard";
+import TransactionList from "@/components/TransactionList";
+
 
 // 钱包连接组件 - 面试加分点说明：
 // 1. 使用 React Hooks 管理状态
@@ -82,6 +84,7 @@ export default function WalletConnect() {
           </p>
           <NetworkBadge />
           <BalanceCard address={address} />
+          <TransactionList address={address} />
         </div>
       )}
     </div>

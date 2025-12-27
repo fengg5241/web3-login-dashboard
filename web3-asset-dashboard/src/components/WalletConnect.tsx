@@ -3,6 +3,8 @@ import { getProvider } from "@/utils/web3";
 import NetworkBadge from "@/components/NetworkBadge";
 import BalanceCard from "@/components/BalanceCard";
 import TransactionList from "@/components/TransactionList";
+import SwitchNetworkButton from "@/components/SwitchNetworkButton";
+import TokenBalances from "./TokenBalances";
 
 
 // 钱包连接组件 - 面试加分点说明：
@@ -82,9 +84,11 @@ export default function WalletConnect() {
           <p className="font-mono mt-2" title={address}>
             {address.slice(0, 6)}...{address.slice(-4)}
           </p>
+          <SwitchNetworkButton />
           <NetworkBadge />
           <BalanceCard address={address} />
           <TransactionList address={address} />
+          <TokenBalances address={address} />
         </div>
       )}
     </div>

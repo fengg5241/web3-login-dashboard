@@ -74,7 +74,7 @@ export default function WalletConnect() {
         </button>
       ) : (
         // 已连接钱包时显示钱包地址
-        <div>
+        <div className="space-y-2">
           <p className="text-sm text-gray-500">Connected Wallet</p>
           {/* 显示格式化的钱包地址：前6位 + ... + 后4位 */}
           <p className="font-mono mt-2" title={address}>

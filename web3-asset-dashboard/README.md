@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
+# Web3 Wallet Dashboard
+
+A Web3 wallet dashboard built with Next.js and ethers.js, supporting wallet connection,
+network detection, network switching, and real-time balance updates.
+
+## Features
+- MetaMask wallet connection
+- Real-time network detection
+- One-click network switching (Mainnet / Sepolia)
+- Automatic ETH balance synchronization
+- Event-driven architecture (no polling)
+
+## Tech Stack
+- Next.js (App Router)
+- TypeScript
+- ethers.js v6
+- MetaMask
+
 ## Getting Started
 
 First, run the development server:

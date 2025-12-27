@@ -29,6 +29,24 @@ export default function BalanceCard({ address }: Props) {
     };
 
     loadBalance();
+
+    const handleAccountsChanged = () => {
+      loadBalance();
+    };
+
+    const handleChainChanged = () => {
+      loadBalance();
+    };
+
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+    window.ethereum.on("chainChanged", handleChainChanged);
+
+    return () => {
+      window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+      window.ethereum.removeListener("chainChanged", handleChainChanged);
+    };
+
+    
   }, [address]);
 
   return (

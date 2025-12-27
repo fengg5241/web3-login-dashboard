@@ -67,19 +67,60 @@ export default function SwitchNetworkButton() {
     }
   };
 
+  const switchNetwork = async (target: "mainnet" | "sepolia") => {
+  if (!window.ethereum) return;
+
+  const params =
+    target === "mainnet"
+      ? { chainId: "0x1" }
+      : { chainId: "0xaa36a7" }; // Sepolia
+
+  try {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [params],
+    });
+  } catch (error: any) {
+    // Only Sepolia may need add
+    if (error.code === 4902 && target === "sepolia") {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: "0xaa36a7",
+            chainName: "Sepolia",
+            rpcUrls: ["https://rpc.sepolia.org"],
+            nativeCurrency: {
+              name: "Sepolia ETH",
+              symbol: "ETH",
+              decimals: 18,
+            },
+            blockExplorerUrls: ["https://sepolia.etherscan.io"],
+          },
+        ],
+      });
+    }
+  }
+};
+
+
   if (!currentChainId) return null;
 
   if (currentChainId === SEPOLIA_CHAIN_ID) {
     return (
       <div style={{ marginBottom: 16, color: "green" }}>
-        Connected to Sepolia
+        Connected to Sepolia--
+        <button onClick={() => switchNetwork("mainnet")}>
+            Switch to Mainnet
+        </button>
       </div>
     );
-  }
-
-  return (
-    <button onClick={switchToSepolia} disabled={loading}>
+  }else{
+return (
+    <button onClick={() => switchNetwork("sepolia")} disabled={loading}>
       {loading ? "Switching..." : "Switch to Sepolia"}
     </button>
   );
+  }
+  
 }

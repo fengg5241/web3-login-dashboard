@@ -164,7 +164,7 @@ export default function TransactionList({ address }: { address: string }) {
     <div style={{ marginTop: 24, maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h3>Recent Transactions</h3>
-        <button 
+        {/* <button 
           onClick={sendTestTransaction}
           disabled={sending || loading}
           style={{
@@ -178,7 +178,7 @@ export default function TransactionList({ address }: { address: string }) {
           }}
         >
           {sending ? 'Sending...' : 'Send Test Transaction'}
-        </button>
+        </button> */}
       </div>
 
       {txStatus && <p style={{ color: '#4CAF50', margin: '10px 0' }}>{txStatus}</p>}
